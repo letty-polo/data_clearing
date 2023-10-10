@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+{% block titulºo %} Main Page {% endblock %}
+{% block contenido %}
+
+{% if response == "Authenticated": %}
+welcome{{user}}
+{% else %}
+{{response}}
+{% endif %}
+
+ <form action="response.html" id="form_json" method="post">
+        <label for="segments">Segments Ids: </label>
+        <br>
+        <input type="text" name="segments">
+        
+       
+        <input type="submit" id="send" value="submit"/>
+
+    </form>
+
+
+
+
+
+
+
+{% endblock %}

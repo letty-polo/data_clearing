@@ -1,0 +1,160 @@
+{% extends "template.html" %}
+{% block titulºo %} Main Page {% endblock %}
+{% block contenido %}
+{% if message is defined %}
+    {{ message }}
+{% else %}
+ 
+
+
+  <style>
+      table.scrolldown {
+         width: 100%;
+         border-spacing: 0;
+         border: 1px solid black;
+      }
+          
+      table.scrolldown tbody, table.scrolldown thead {
+         display: block;
+      }   
+      thead tr th {
+         height: 40px; 
+         line-height: 40px;
+         background: white;
+         color: white;
+      }          
+      table.scrolldown tbody {
+         height: 120px; 
+         overflow-y: auto;
+         overflow-x: hidden; 
+      }
+          
+      tbody { 
+         border-top: 2px solid black;
+         background: orange;
+      }
+          
+      tbody td, thead th {
+         width : auto;
+         border-right: 1px solid black;
+      }
+      td {
+         text-align:center;
+      }
+      .short_name{
+      width : 200px;
+      }
+
+   </style>
+
+
+<h2 class="title is-2">Segments With Clearing</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>segment_id</th>
+      <th>data_provider</th>
+      <th>dpc_id</th>
+      <th>pub <img src="/static/help_icon.png" width="15" height="15" alt="1=Public, 0=Private" title="1=Public, 0=Private"></th>
+      <th>short_name</th>
+      <th class="short_name">segment_code</th>
+      <th>dpc_price</th>
+      <th>Custom Rates</th>
+      <th>Shared with Buyers</th>
+       </tr>
+  </thead>
+  <tbody>
+      <tr>
+      {% for segment in found %}
+      <td>{{segment[3]}}</td>
+      <td>{{segment[1]}}</td>
+      <td>{{segment[0]}}</td>        
+      <td >{{segment[2]}}</td>
+      <td >{{segment[4]}}</td>
+      <td>{{segment[5]}}</td>
+      <td>{{segment[6]}}</td>
+      <td> <table class="table scrolldown">
+        <tr><td>Buyer</td><td>Price</td><td>Currency</td></tr>
+        {% for dpc in custom_rates_found %}
+          {% if segment[0] == dpc[1] %}
+          <tr>
+          <td>{{dpc[2]}}</td>
+          <td>{{dpc[4]}}</td>
+          <td>{{dpc[5]}}</td>
+                 </tr>     
+          {% endif %}
+          {% endfor %}    
+          </table>
+
+      </td>
+      <td>
+        <table class="table scrolldown">
+         <tr><td>Buyers</td></tr>
+           {% for buyer in sharing_buyers %}
+                {% if segment[3] == buyer[0] %}
+                <tr>
+             <td>     {{ buyer[1] }} </td>
+           </tr>
+
+                {% endif %}
+              {% endfor %}
+              {% for a_buyer in buyers_all %}
+              {% if segment[1] == a_buyer[1] %}
+              <tr>
+                <td>     {{ a_buyer[0] }} </td>
+              </tr>
+              {% endif %}
+              {% endfor %}
+         </table>
+          </td> 
+     </tr>       
+   
+      {% endfor %}
+  </tbody>
+</table>
+
+Data clearing Segments: {{ clearing_list }}
+
+<h2 class="title is-2">Segments With No Clearing</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>short_name</th>
+      <th>active</th>
+      <th>deleted</th>
+      <th>member_id</th>
+       <th>Shared with Buyers</th>
+       </tr>
+  </thead>
+  <tbody>
+      <tr>
+      {% for segment in not_clearing %}
+      <td>{{segment[0]}}</td>
+      <td>{{segment[1]}}</td>
+      <td>{{segment[2]}}</td>        
+      <td>{{segment[3]}}</td>
+      <td>{{segment[4]}}</td>
+      <td>
+        <table class="table scrolldown">
+         <tr><td>Buyers</td></tr>
+           {% for buyer in sharing_buyers %}
+                {% if segment[0] == buyer[0] %}
+                <tr>
+             <td>     {{ buyer[1] }} </td>
+           </tr>
+
+                {% endif %}
+              {% endfor %}
+            
+         </table>
+          </td>       
+       </tr>     
+      {% endfor %}
+   
+  </tbody>
+</table>
+
+{% endif %}
+{% endblock %}
+
